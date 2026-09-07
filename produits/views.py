@@ -49,6 +49,7 @@ def liste_produits(request):
         )
 
     for label in labels:
+
         if label in ["bio", "label_rouge", "aop", "igp"]:
             produits = produits.filter(
                 **{label: True}

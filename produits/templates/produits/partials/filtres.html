@@ -1,155 +1,157 @@
-<div class="filtres">
+<form method="get" id="form-filtres">
 
-    <h2>Filtres</h2>
+    <div class="filtres">
 
-    <input
-        type="text"
-        id="recherche"
-        placeholder="Rechercher..."
-    >
+        <h2>Filtres</h2>
 
-    <hr>
+        <input
+            type="text"
+            name="recherche"
+            id="recherche"
+            value="{{ recherche }}"
+            placeholder="Rechercher..."
+        >
 
-    <h3>Catégorie</h3>
+        <hr>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Fruit">
-        Fruit
-    </label>
+        <h3>Catégorie</h3>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Légume">
-        Légume
-    </label>
+        {% for valeur, nom in categories %}
 
-    <label>
-        <input type="checkbox" name="categorie" value="Viande">
-        Viande
-    </label>
+            <label>
+                <input
+                    type="checkbox"
+                    name="categorie"
+                    value="{{ valeur }}"
+                    {% if valeur in selected_categories %}checked{% endif %}
+                >
+                {{ nom }}
+            </label>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Poisson">
-        Poisson
-    </label>
+        {% endfor %}
 
-    <label>
-        <input type="checkbox" name="categorie" value="Produit laitier">
-        Produit laitier
-    </label>
+        <hr>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Épicerie">
-        Épicerie
-    </label>
+        <h3>Prix</h3>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Boisson">
-        Boisson
-    </label>
+        <input
+            type="number"
+            name="prix_min"
+            id="prix-min"
+            value="{{ prix_min }}"
+            placeholder="Prix minimum"
+            step="0.01"
+        >
 
-    <label>
-        <input type="checkbox" name="categorie" value="Boulangerie">
-        Boulangerie
-    </label>
+        <input
+            type="number"
+            name="prix_max"
+            id="prix-max"
+            value="{{ prix_max }}"
+            placeholder="Prix maximum"
+            step="0.01"
+        >
 
-    <label>
-        <input type="checkbox" name="categorie" value="Confiserie">
-        Confiserie
-    </label>
+        <hr>
 
-    <label>
-        <input type="checkbox" name="categorie" value="Autre">
-        Autre
-    </label>
+        <h3>Nutri-Score</h3>
 
-    <hr>
+        {% for valeur, nom in nutriscores %}
 
-    <h3>Prix</h3>
+            <label>
+                <input
+                    type="checkbox"
+                    name="nutriscore"
+                    value="{{ valeur }}"
+                    {% if valeur in selected_nutriscores %}checked{% endif %}
+                >
+                {{ nom }}
+            </label>
 
-    <input
-        type="number"
-        id="prix-min"
-        placeholder="Prix minimum"
-        step="0.01"
-    >
+        {% endfor %}
 
-    <input
-        type="number"
-        id="prix-max"
-        placeholder="Prix maximum"
-        step="0.01"
-    >
+        <hr>
 
-    <hr>
+        <h3>Labels</h3>
 
-    <h3>Nutri-Score</h3>
+        <label>
+            <input
+                type="checkbox"
+                name="label"
+                value="bio"
+                {% if "bio" in selected_labels %}checked{% endif %}
+            >
+            Bio
+        </label>
 
-    <label>
-        <input type="checkbox" name="nutriscore" value="A">
-        A
-    </label>
+        <label>
+            <input
+                type="checkbox"
+                name="label"
+                value="label_rouge"
+                {% if "label_rouge" in selected_labels %}checked{% endif %}
+            >
+            Label Rouge
+        </label>
 
-    <label>
-        <input type="checkbox" name="nutriscore" value="B">
-        B
-    </label>
+        <label>
+            <input
+                type="checkbox"
+                name="label"
+                value="aop"
+                {% if "aop" in selected_labels %}checked{% endif %}
+            >
+            AOP
+        </label>
 
-    <label>
-        <input type="checkbox" name="nutriscore" value="C">
-        C
-    </label>
+        <label>
+            <input
+                type="checkbox"
+                name="label"
+                value="igp"
+                {% if "igp" in selected_labels %}checked{% endif %}
+            >
+            IGP
+        </label>
 
-    <label>
-        <input type="checkbox" name="nutriscore" value="D">
-        D
-    </label>
+        <hr>
 
-    <label>
-        <input type="checkbox" name="nutriscore" value="E">
-        E
-    </label>
+        <h3>Origine</h3>
 
-    <hr>
+        <label>
+            <input
+                type="checkbox"
+                name="origine"
+                value="France"
+                {% if "France" in selected_origines %}checked{% endif %}
+            >
+            France
+        </label>
 
-    <h3>Labels</h3>
+        <label>
+            <input
+                type="checkbox"
+                name="origine"
+                value="Italie"
+                {% if "Italie" in selected_origines %}checked{% endif %}
+            >
+            Italie
+        </label>
 
-    <label>
-        <input type="checkbox" name="label" value="bio">
-        Bio
-    </label>
+        <label>
+            <input
+                type="checkbox"
+                name="origine"
+                value="Espagne"
+                {% if "Espagne" in selected_origines %}checked{% endif %}
+            >
+            Espagne
+        </label>
 
-    <label>
-        <input type="checkbox" name="label" value="label_rouge">
-        Label Rouge
-    </label>
+        <button type="submit">
+            Filtrer
+        </button>
 
-    <label>
-        <input type="checkbox" name="label" value="aop">
-        AOP
-    </label>
+    </div>
 
-    <label>
-        <input type="checkbox" name="label" value="igp">
-        IGP
-    </label>
-
-    <hr>
-
-    <h3>Origine</h3>
-
-    <label>
-        <input type="checkbox" name="origine" value="France">
-        France
-    </label>
-
-    <label>
-        <input type="checkbox" name="origine" value="Italie">
-        Italie
-    </label>
-
-    <label>
-        <input type="checkbox" name="origine" value="Espagne">
-        Espagne
-    </label>
-
-</div>
+</form>
