@@ -1,0 +1,46 @@
+<div
+    class="produit"
+    data-id="{{ produit.id }}"
+    data-nom="{{ produit.nom|lower }}"
+    data-marque="{{ produit.marque|lower }}"
+    data-categorie="{{ produit.get_categorie_display }}"
+    data-prix="{{ produit.prix }}"
+    data-nutriscore="{{ produit.nutriscore }}"
+    data-origine="{{ produit.origine }}"
+    data-bio="{{ produit.bio|yesno:'true,false' }}"
+    data-label-rouge="{{ produit.label_rouge|yesno:'true,false' }}"
+    data-aop="{{ produit.aop|yesno:'true,false' }}"
+    data-igp="{{ produit.igp|yesno:'true,false' }}"
+    onclick="ouvrirProduit({{ produit.id }})"
+>
+
+    {% if produit.image %}
+
+        <img
+            src="{{ produit.image.url }}"
+            alt="{{ produit.nom }}"
+        >
+
+    {% else %}
+
+        <p>Aucune image</p>
+
+    {% endif %}
+
+    <h2>{{ produit.nom }}</h2>
+
+    <p>Marque : {{ produit.marque }}</p>
+
+    <p>Prix : {{ produit.prix }} €</p>
+
+    {% if produit.gramme %}
+        <p>Poids : {{ produit.gramme }} g</p>
+        <p>Prix au kg : {{ produit.prixkg }} €/kg</p>
+    {% endif %}
+
+    {% if produit.litre %}
+        <p>Volume : {{ produit.litre }} L</p>
+        <p>Prix au litre : {{ produit.prixlitre }} €/L</p>
+    {% endif %}
+
+</div>

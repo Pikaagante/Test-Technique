@@ -1,0 +1,66 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'produits/css/liste.css' %}">
+
+<h1>Mes produits</h1>
+
+<div class="conteneur">
+
+    {% include "produits/partials/filtres.html" %}
+
+    <div class="produits">
+
+        {% for produit in produits %}
+
+            {% include "produits/partials/carte_produit.html" %}
+
+        {% empty %}
+
+            <p>Aucun produit.</p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+{% include "produits/partials/popup_produit.html" %}
+
+
+<script>
+
+    const produits = {
+
+        {% for produit in produits %}
+
+            {{ produit.id }}: {
+
+                nom: "{{ produit.nom|escapejs }}",
+                marque: "{{ produit.marque|escapejs }}",
+                description: "{{ produit.description|escapejs }}",
+                categorie: "{{ produit.get_categorie_display|escapejs }}",
+                prix: "{{ produit.prix }}",
+                gramme: "{{ produit.gramme|default:'' }}",
+                prixkg: "{{ produit.prixkg|default:'' }}",
+                litre: "{{ produit.litre|default:'' }}",
+                prixlitre: "{{ produit.prixlitre|default:'' }}",
+                date_peremption: "{{ produit.date_peremption }}",
+                origine: "{{ produit.origine|escapejs }}",
+                nutriscore: "{{ produit.nutriscore }}",
+                bio: {{ produit.bio|yesno:"true,false" }},
+                label_rouge: {{ produit.label_rouge|yesno:"true,false" }},
+                aop: {{ produit.aop|yesno:"true,false" }},
+                igp: {{ produit.igp|yesno:"true,false" }},
+                image: "{% if produit.image %}{{ produit.image.url }}{% endif %}"
+
+            },
+
+        {% endfor %}
+
+    };
+
+</script>
+
+<script src="{% static 'produits/js/filtres.js' %}"></script>
+<script src="{% static 'produits/js/popup.js' %}"></script>
