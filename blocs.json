@@ -1,0 +1,42 @@
+{
+    "blocs": [
+        {
+            "phrases": [
+                "La pratique régulière améliore les compétences"
+            ]
+        },
+        {
+            "phrases": [
+                "Une fonction doit avoir une responsabilité claire",
+                "Cette phrase ne doit pas être affichée"
+            ]
+        },
+        {
+            "phrases": [
+                "Cette phrase ne doit pas être affichée",
+                "Découper un problème simplifie sa résolution",
+                "Des noms explicites rendent le code plus lisible"
+            ]
+        },
+        {
+            "phrases": [
+                "Tester son code permet de détecter les erreurs",
+                "Un code simple est plus facile à maintenir",
+                "Documenter les choix facilite le travail en équipe",
+                "Une bonne organisation améliore la lisibilité"
+            ]
+        },
+        {
+            "phrases": [
+                "Testersoncodepermetdedétecterleserreurs",
+                "Ceci est un test pour voir si les 100 caractères vont passer et ne pas dépasser la limite imposée",
+                "                                          ",
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "CETTE PHRASE NE DOIT PAS ÊTRE AFFICHÉE"
+            ]
+        },
+        {
+            "phrases": []
+        }
+    ]
+}
