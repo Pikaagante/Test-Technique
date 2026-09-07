@@ -43,6 +43,18 @@ function ouvrirProduit(id) {
         <p><strong>Label Rouge :</strong> ${produit.label_rouge ? "Oui" : "Non"}</p>
         <p><strong>AOP :</strong> ${produit.aop ? "Oui" : "Non"}</p>
         <p><strong>IGP :</strong> ${produit.igp ? "Oui" : "Non"}</p>
+
+        <div class="actions-produit">
+
+            <button onclick="modifierProduit(${id})">
+                Modifier
+            </button>
+
+            <button onclick="supprimerProduit(${id})">
+                Supprimer
+            </button>
+
+        </div>
     `;
 
     document.getElementById("popup-infos").innerHTML = html;
@@ -54,5 +66,65 @@ function ouvrirProduit(id) {
 function fermerPopup() {
 
     document.getElementById("popup").style.display = "none";
+
+}
+
+
+document.getElementById("popup").addEventListener("click", function(event) {
+
+    if (event.target === this) {
+        fermerPopup();
+    }
+
+});
+
+
+function supprimerProduit(id) {
+
+    if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) {
+        return;
+    }
+
+    fetch(`/produits/${id}/supprimer/`, {
+
+        method: "POST",
+
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        }
+
+    })
+    .then(response => {
+
+        if (response.ok) {
+            location.reload();
+        }
+
+    });
+
+}
+
+
+function getCookie(name) {
+
+    const cookies = document.cookie.split(";");
+
+    for (const cookie of cookies) {
+
+        const [key, value] = cookie.trim().split("=");
+
+        if (key === name) {
+            return decodeURIComponent(value);
+        }
+
+    }
+
+    return null;
+
+}
+
+function modifierProduit(id) {
+
+    window.location.href = `/produits/${id}/modifier/`;
 
 }

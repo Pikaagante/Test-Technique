@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from .models import Produit
+from ..models import Produit
+from ..forms import ProduitForm
 
 
 def liste_produits(request):
@@ -51,6 +52,7 @@ def liste_produits(request):
     for label in labels:
 
         if label in ["bio", "label_rouge", "aop", "igp"]:
+
             produits = produits.filter(
                 **{label: True}
             )
@@ -64,6 +66,7 @@ def liste_produits(request):
     query_params.pop("page", None)
 
     return render(request, "produits/liste.html", {
+
         "produits": produits,
         "query_params": query_params.urlencode(),
 
@@ -79,4 +82,76 @@ def liste_produits(request):
         "recherche": recherche,
         "prix_min": prix_min,
         "prix_max": prix_max,
+
     })
+
+
+def ajouter_produit(request):
+
+    if request.method == "POST":
+
+        formulaire = ProduitForm(
+            request.POST,
+            request.FILES
+        )
+
+        if formulaire.is_valid():
+
+            formulaire.save()
+
+            return redirect("liste_produits")
+
+    else:
+
+        formulaire = ProduitForm()
+
+    return render(request, "produits/ajouter.html", {
+        "formulaire": formulaire
+    })
+
+
+def modifier_produit(request, produit_id):
+
+    produit = get_object_or_404(
+        Produit,
+        id=produit_id
+    )
+
+    if request.method == "POST":
+
+        formulaire = ProduitForm(
+            request.POST,
+            request.FILES,
+            instance=produit
+        )
+
+        if formulaire.is_valid():
+
+            formulaire.save()
+
+            return redirect("liste_produits")
+
+    else:
+
+        formulaire = ProduitForm(
+            instance=produit
+        )
+
+    return render(request, "produits/modifier.html", {
+        "formulaire": formulaire,
+        "produit": produit
+    })
+
+
+def supprimer_produit(request, produit_id):
+
+    produit = get_object_or_404(
+        Produit,
+        id=produit_id
+    )
+
+    if request.method == "POST":
+
+        produit.delete()
+
+    return redirect("liste_produits")

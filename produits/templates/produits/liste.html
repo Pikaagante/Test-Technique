@@ -4,6 +4,10 @@
 
 <h1>Mes produits</h1>
 
+<a href="{% url 'ajouter_produit' %}">
+    Ajouter un produit
+</a>
+
 <div class="conteneur">
 
     {% include "produits/partials/filtres.html" %}
@@ -36,9 +40,49 @@
     {% endif %}
 
 
-    <span>
-        Page {{ produits.number }} sur {{ produits.paginator.num_pages }}
-    </span>
+    {% if produits.number > 3 %}
+
+        <a href="?{{ query_params }}&page=1">
+            1
+        </a>
+
+        <span>...</span>
+
+    {% endif %}
+
+
+    {% for numero in produits.paginator.page_range %}
+
+        {% if numero >= produits.number|add:"-1" and numero <= produits.number|add:"1" %}
+
+            {% if numero == produits.number %}
+
+                <span class="page-actuelle">
+                    {{ numero }}
+                </span>
+
+            {% else %}
+
+                <a href="?{{ query_params }}&page={{ numero }}">
+                    {{ numero }}
+                </a>
+
+            {% endif %}
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    {% if produits.number < produits.paginator.num_pages|add:"-2" %}
+
+        <span>...</span>
+
+        <a href="?{{ query_params }}&page={{ produits.paginator.num_pages }}">
+            {{ produits.paginator.num_pages }}
+        </a>
+
+    {% endif %}
 
 
     {% if produits.has_next %}
