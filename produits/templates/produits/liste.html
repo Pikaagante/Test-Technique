@@ -24,6 +24,21 @@
 
 </div>
 
+<div class="pagination">
+
+    {% if produits.has_previous %}
+        <a href="?page={{ produits.previous_page_number }}">← Précédente</a>
+    {% endif %}
+
+    <span>
+        Page {{ produits.number }} sur {{ produits.paginator.num_pages }}
+    </span>
+
+    {% if produits.has_next %}
+        <a href="?page={{ produits.next_page_number }}">Suivante →</a>
+    {% endif %}
+
+</div>
 
 {% include "produits/partials/popup_produit.html" %}
 
