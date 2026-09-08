@@ -1,7 +1,6 @@
+<!-- Menu -->
 <nav class="menu">
-
     <div class="menu-gauche">
-
         <a href="{% url 'liste_produits' %}" class="logo">
             🛒 MonShop
         </a>
@@ -17,42 +16,28 @@
         {% endif %}
 
         <div class="panier">
-
             <button class="panier-bouton" onclick="ouvrirPanier()">
                 🛍️
-                <span id="nombre-produits">
-                    0
-                </span>
+                <span id="nombre-produits">0</span>
             </button>
-
         </div>
 
         {% if user.is_staff %}
-
             <a href="{% url 'ajouter_produit' %}">
                 Ajouter un produit
             </a>
-
         {% endif %}
-
     </div>
 
-
     <div class="menu-droite">
-
         {% if user.is_authenticated %}
-
             <div class="profil">
-
                 <button class="profil-bouton">
                     👤 {{ user.username }} ▼
                 </button>
 
                 <div class="profil-menu">
-
-                    <a href="#">
-                        Mon profil
-                    </a>
+                    <a href="#">Mon profil</a>
 
                     <a href="{% url 'liste_factures' %}">
                         Mes factures
@@ -61,13 +46,9 @@
                     <a href="{% url 'deconnexion' %}">
                         Déconnexion
                     </a>
-
                 </div>
-
             </div>
-
         {% else %}
-
             <a href="{% url 'connexion' %}">
                 Se connecter
             </a>
@@ -75,18 +56,14 @@
             <a href="{% url 'inscription' %}">
                 S'inscrire
             </a>
-
         {% endif %}
-
     </div>
-
 </nav>
 
 
+<!-- Factures -->
 <div id="popup-panier" class="popup-panier">
-
     <div class="popup-panier-contenu">
-
         <button
             type="button"
             class="fermer-panier"
@@ -95,20 +72,14 @@
             ×
         </button>
 
-        <h2 id="panier-titre">
-            Votre panier
-        </h2>
+        <h2 id="panier-titre">Votre panier</h2>
 
-        <div id="panier-contenu">
-        </div>
+        <div id="panier-contenu"></div>
 
         <div class="panier-bas">
-
             <strong>
                 Total :
-                <span id="panier-total">
-                    0 €
-                </span>
+                <span id="panier-total">0 €</span>
             </strong>
 
             <button
@@ -118,7 +89,6 @@
             >
                 Confirmer la commande
             </button>
-
         </div>
 
         <button
@@ -129,18 +99,14 @@
         >
             Annuler la modification
         </button>
-
     </div>
-
 </div>
 
 
+<!-- Notification -->
 <div id="notification" class="notification"></div>
 
-
 <script>
-
     const utilisateurConnecte =
         {{ user.is_authenticated|yesno:"true,false" }};
-
 </script>

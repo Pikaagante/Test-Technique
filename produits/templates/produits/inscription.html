@@ -16,9 +16,7 @@
     {% csrf_token %}
 
     <p>
-        <label for="username">
-            Nom d'utilisateur
-        </label>
+        <label for="username"> Nom d'utilisateur </label>
 
         <input
             type="text"
@@ -64,8 +62,7 @@
             name="type_compte"
             value="utilisateur"
             checked
-        >
-        Utilisateur
+        > Utilisateur
     </label>
 
     <label>
@@ -73,13 +70,12 @@
             type="radio"
             name="type_compte"
             value="admin"
-        >
-        Administrateur
+        > Administrateur
     </label>
 
     <p>
         ⚠️ <strong>TEST</strong>
-        La création d'un compte administrateur sera supprimée avant la mise en production.
+        La création d'un compte administrateur sera supprimée avant la mise en production. 
         Cette option est actuellement présente uniquement pour tester l'ajout de produits
         via un compte administrateur.
     </p>

@@ -3,6 +3,7 @@ from django.urls import path
 from .views.produits import (
     liste_produits,
     ajouter_produit,
+    rechercher_produits,
     modifier_produit,
     supprimer_produit
 )
@@ -31,6 +32,12 @@ from .views.factures import (
 
 
 urlpatterns = [
+    
+    path(
+        "produits/rechercher/",
+        rechercher_produits,
+        name="rechercher_produits"
+    ),
 
     path(
         "",

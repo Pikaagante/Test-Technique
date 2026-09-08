@@ -1,3 +1,4 @@
+<!-- Informations du produit -->
 <div
     class="produit"
     data-id="{{ produit.id }}"
@@ -13,58 +14,29 @@
     data-igp="{{ produit.igp|yesno:'true,false' }}"
     onclick="ouvrirProduit({{ produit.id }})"
 >
-
     {% if produit.image %}
-
-        <img
-            src="{{ produit.image.url }}"
-            alt="{{ produit.nom }}"
-        >
-
+        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
     {% else %}
-
         <p>Aucune image</p>
-
     {% endif %}
 
     <h2>{{ produit.nom }}</h2>
 
-    <p>
-        Marque : {{ produit.marque }}
-    </p>
-
-    <p>
-        Prix : {{ produit.prix }} €
-    </p>
+    <p>Marque : {{ produit.marque }}</p>
+    <p>Prix : {{ produit.prix }} €</p>
 
     {% if produit.gramme %}
-
-        <p>
-            Poids : {{ produit.gramme }} g
-        </p>
-
-        <p>
-            Prix au kg : {{ produit.prixkg }} €/kg
-        </p>
-
+        <p>Poids : {{ produit.gramme }} g</p>
+        <p>Prix au kg : {{ produit.prixkg }} €/kg</p>
     {% endif %}
 
     {% if produit.litre %}
-
-        <p>
-            Volume : {{ produit.litre }} L
-        </p>
-
-        <p>
-            Prix au litre : {{ produit.prixlitre }} €/L
-        </p>
-
+        <p>Volume : {{ produit.litre }} L</p>
+        <p>Prix au litre : {{ produit.prixlitre }} €/L</p>
     {% endif %}
 
-    <button
-        onclick="ajouterAuPanier(event, {{ produit.id }})"
-    >
+    <!-- Ajout au panier -->
+    <button onclick="ajouterAuPanier(event, {{ produit.id }})">
         Ajouter
     </button>
-
 </div>

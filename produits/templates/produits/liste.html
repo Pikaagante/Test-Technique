@@ -1,17 +1,12 @@
 {% load static %}
 
-<link
-    rel="stylesheet"
-    href="{% static 'produits/css/liste.css' %}"
->
-
-<link
-    rel="stylesheet"
-    href="{% static 'produits/css/menu.css' %}"
->
+<!-- Styles -->
+<link rel="stylesheet" href="{% static 'produits/css/liste.css' %}">
+<link rel="stylesheet" href="{% static 'produits/css/menu.css' %}">
 
 {% include "produits/partials/menu.html" %}
 
+<!-- Produits et filtres -->
 <div class="conteneur">
 
     {% include "produits/partials/filtres.html" %}
@@ -19,102 +14,69 @@
     <div class="produits">
 
         {% for produit in produits %}
-
             {% include "produits/partials/carte_produit.html" %}
-
         {% empty %}
-
             <p>Aucun produit.</p>
-
         {% endfor %}
 
     </div>
 
 </div>
 
-
+<!-- Pagination -->
 <div class="pagination">
 
     {% if produits.has_previous %}
-
         <a href="?{{ query_params }}&page={{ produits.previous_page_number }}">
             ← Précédente
         </a>
-
     {% endif %}
-
 
     {% if produits.number > 3 %}
-
-        <a href="?{{ query_params }}&page=1">
-            1
-        </a>
-
+        <a href="?{{ query_params }}&page=1">1</a>
         <span>...</span>
-
     {% endif %}
 
-
     {% for numero in produits.paginator.page_range %}
-
         {% if numero >= produits.number|add:"-1" and numero <= produits.number|add:"1" %}
 
             {% if numero == produits.number %}
-
-                <span class="page-actuelle">
-                    {{ numero }}
-                </span>
-
+                <span class="page-actuelle">{{ numero }}</span>
             {% else %}
-
                 <a href="?{{ query_params }}&page={{ numero }}">
                     {{ numero }}
                 </a>
-
             {% endif %}
 
         {% endif %}
-
     {% endfor %}
 
-
     {% if produits.number < produits.paginator.num_pages|add:"-2" %}
-
         <span>...</span>
 
         <a href="?{{ query_params }}&page={{ produits.paginator.num_pages }}">
             {{ produits.paginator.num_pages }}
         </a>
-
     {% endif %}
 
-
     {% if produits.has_next %}
-
         <a href="?{{ query_params }}&page={{ produits.next_page_number }}">
             Suivante →
         </a>
-
     {% endif %}
 
 </div>
 
-
+<!-- Popup produit -->
 {% include "produits/partials/popup_produit.html" %}
 
-
+<!-- Données des produits -->
 <script>
-
-    const estAdmin =
-        {{ user.is_staff|yesno:"true,false" }};
-
+    const estAdmin = {{ user.is_staff|yesno:"true,false" }};
 
     const produits = {
-
         {% for produit in produits %}
-
             {{ produit.id }}: {
-
                 nom: "{{ produit.nom|escapejs }}",
                 marque: "{{ produit.marque|escapejs }}",
                 description: "{{ produit.description|escapejs }}",
@@ -127,33 +89,17 @@
                 date_peremption: "{{ produit.date_peremption }}",
                 origine: "{{ produit.origine|escapejs }}",
                 nutriscore: "{{ produit.nutriscore }}",
-
-                bio:
-                    {{ produit.bio|yesno:"true,false" }},
-
-                label_rouge:
-                    {{ produit.label_rouge|yesno:"true,false" }},
-
-                aop:
-                    {{ produit.aop|yesno:"true,false" }},
-
-                igp:
-                    {{ produit.igp|yesno:"true,false" }},
-
-                image:
-                    "{% if produit.image %}{{ produit.image.url }}{% endif %}"
-
+                bio: {{ produit.bio|yesno:"true,false" }},
+                label_rouge: {{ produit.label_rouge|yesno:"true,false" }},
+                aop: {{ produit.aop|yesno:"true,false" }},
+                igp: {{ produit.igp|yesno:"true,false" }},
+                image: "{% if produit.image %}{{ produit.image.url }}{% endif %}"
             },
-
         {% endfor %}
-
     };
-
 </script>
 
-
+<!-- JavaScript -->
 <script src="{% static 'produits/js/filtres.js' %}"></script>
-
 <script src="{% static 'produits/js/popup.js' %}"></script>
-
 <script src="{% static 'produits/js/panier.js' %}"></script>

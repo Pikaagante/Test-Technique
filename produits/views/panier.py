@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from ..models import Produit
 
 
+# Ajoute un produit au panier
 def ajouter_panier(request, produit_id):
 
     produit = get_object_or_404(
@@ -30,6 +31,7 @@ def ajouter_panier(request, produit_id):
     })
 
 
+# Modifie la quantité d'un produit
 def modifier_quantite(request, produit_id):
 
     get_object_or_404(
@@ -64,14 +66,8 @@ def modifier_quantite(request, produit_id):
         }, status=400)
 
     if quantite <= 0:
-
-        panier.pop(
-            produit_id,
-            None
-        )
-
+        panier.pop(produit_id, None)
     else:
-
         panier[produit_id] = quantite
 
     request.session["panier"] = panier
@@ -82,6 +78,7 @@ def modifier_quantite(request, produit_id):
     })
 
 
+# Supprime un produit du panier
 def supprimer_panier(request, produit_id):
 
     if request.method != "POST":
@@ -110,6 +107,7 @@ def supprimer_panier(request, produit_id):
     })
 
 
+# Récupère le contenu du panier
 def afficher_panier(request):
 
     panier = request.session.get(
@@ -122,7 +120,6 @@ def afficher_panier(request):
     )
 
     liste = []
-
     nombre_produits = 0
     total = 0
 

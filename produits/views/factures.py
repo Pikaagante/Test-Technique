@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from ..models import Facture, ContenuFacture, Produit
 
 
+# Vérifie si l'utilisateur peut modifier une facture
 def utilisateur_peut_modifier(request, facture):
     return (
         request.user.is_staff
@@ -13,6 +14,7 @@ def utilisateur_peut_modifier(request, facture):
     )
 
 
+# Commence la modification d'une facture
 @login_required
 def commencer_modification_facture(request, facture_id):
 
@@ -42,7 +44,6 @@ def commencer_modification_facture(request, facture_id):
     for contenu in contenus:
         panier[str(contenu.produit_id)] = contenu.quantite
 
-    # On garde l'ancien panier pour pouvoir annuler
     request.session["panier_avant_modification"] = (
         request.session.get("panier", {})
     )
@@ -57,6 +58,7 @@ def commencer_modification_facture(request, facture_id):
     })
 
 
+# Annule la modification d'une facture
 @login_required
 def annuler_modification_facture(request):
 
@@ -81,6 +83,7 @@ def annuler_modification_facture(request):
     })
 
 
+# Crée ou modifie une facture
 @login_required
 def confirmer_facture(request):
 
@@ -145,13 +148,11 @@ def confirmer_facture(request):
             produits_panier.add(produit.id)
 
             if produit.id in contenus_existants:
-
                 contenu = contenus_existants[produit.id]
                 contenu.quantite = quantite
                 contenu.save()
 
             else:
-
                 ContenuFacture.objects.create(
                     facture=facture,
                     produit=produit,
@@ -214,17 +215,15 @@ def confirmer_facture(request):
     })
 
 
+# Affiche les factures avec pagination
 @login_required
 def liste_factures(request):
 
     if request.user.is_staff:
-
         factures = Facture.objects.all().order_by(
             "-date_creation"
         )
-
     else:
-
         factures = Facture.objects.filter(
             utilisateur=request.user
         ).order_by("-date_creation")
@@ -241,13 +240,8 @@ def liste_factures(request):
         total = 0
 
         for contenu in contenus:
-
             nombre_produits += contenu.quantite
-
-            total += (
-                contenu.prix_unitaire
-                * contenu.quantite
-            )
+            total += (contenu.prix_unitaire* contenu.quantite)
 
         liste_factures.append({
             "id": facture.id,
@@ -257,26 +251,18 @@ def liste_factures(request):
             "total": total,
         })
 
-    paginator = Paginator(
-        liste_factures,
-        12
-    )
-
+    paginator = Paginator(liste_factures, 12)
     page_number = request.GET.get("page")
-
-    factures = paginator.get_page(
-        page_number
-    )
+    factures = paginator.get_page(page_number)
 
     return render(
         request,
         "produits/facture.html",
-        {
-            "factures": factures
-        }
+        {"factures": factures}
     )
 
 
+# Affiche le détail d'une facture
 @login_required
 def detail_facture(request, facture_id):
 
@@ -286,7 +272,6 @@ def detail_facture(request, facture_id):
     )
 
     if not utilisateur_peut_modifier(request, facture):
-
         return JsonResponse({
             "success": False,
             "message": "Vous n'avez pas accès à cette facture."
@@ -297,28 +282,20 @@ def detail_facture(request, facture_id):
     ).select_related("produit")
 
     produits = []
-
     nombre_produits = 0
     total = 0
 
     for contenu in contenus:
 
-        sous_total = (
-            contenu.prix_unitaire
-            * contenu.quantite
-        )
+        sous_total = (contenu.prix_unitaire * contenu.quantite)
 
         produits.append({
             "id": contenu.produit.id,
             "nom": contenu.produit.nom,
             "marque": contenu.produit.marque,
             "quantite": contenu.quantite,
-            "prix_unitaire": str(
-                contenu.prix_unitaire
-            ),
-            "sous_total": str(
-                sous_total
-            ),
+            "prix_unitaire": str(contenu.prix_unitaire),
+            "sous_total": str(sous_total),
         })
 
         nombre_produits += contenu.quantite
@@ -347,11 +324,11 @@ def detail_facture(request, facture_id):
     })
 
 
+# Supprime une facture
 @login_required
 def supprimer_facture(request, facture_id):
 
     if request.method != "POST":
-
         return JsonResponse({
             "success": False,
             "message": "Méthode non autorisée."
@@ -362,11 +339,7 @@ def supprimer_facture(request, facture_id):
         id=facture_id
     )
 
-    if not utilisateur_peut_modifier(
-        request,
-        facture
-    ):
-
+    if not utilisateur_peut_modifier(request, facture):
         return JsonResponse({
             "success": False,
             "message": "Vous n'avez pas accès à cette facture."

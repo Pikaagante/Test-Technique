@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 
+# Inscription
 def inscription(request):
 
     if request.method == "POST":
-
         username = request.POST.get("username")
         password = request.POST.get("password")
         confirmation = request.POST.get("confirmation")
@@ -36,10 +36,10 @@ def inscription(request):
     return render(request, "produits/inscription.html")
 
 
+# Connexion
 def connexion(request):
 
     if request.method == "POST":
-
         username = request.POST.get("username")
         password = request.POST.get("password")
 
@@ -60,6 +60,7 @@ def connexion(request):
     return render(request, "produits/connexion.html")
 
 
+# Déconnexion
 def deconnexion(request):
     logout(request)
     return redirect("liste_produits")

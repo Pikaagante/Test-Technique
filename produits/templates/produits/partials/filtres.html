@@ -1,15 +1,14 @@
+<!-- Formulaire de filtres -->
 <form method="get" id="form-filtres">
-
     <div class="filtres">
-
         <h2>Filtres</h2>
 
         <input
             type="text"
-            name="recherche"
             id="recherche"
-            value="{{ recherche }}"
+            name="recherche"
             placeholder="Rechercher..."
+            value="{{ recherche }}"
         >
 
         <hr>
@@ -17,7 +16,6 @@
         <h3>Catégorie</h3>
 
         {% for valeur, nom in categories %}
-
             <label>
                 <input
                     type="checkbox"
@@ -27,7 +25,6 @@
                 >
                 {{ nom }}
             </label>
-
         {% endfor %}
 
         <hr>
@@ -57,7 +54,6 @@
         <h3>Nutri-Score</h3>
 
         {% for valeur, nom in nutriscores %}
-
             <label>
                 <input
                     type="checkbox"
@@ -67,7 +63,6 @@
                 >
                 {{ nom }}
             </label>
-
         {% endfor %}
 
         <hr>
@@ -148,10 +143,6 @@
             Espagne
         </label>
 
-        <button type="submit">
-            Filtrer
-        </button>
-
+        <button type="submit">Filtrer</button>
     </div>
-
 </form>
