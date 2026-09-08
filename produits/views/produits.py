@@ -25,40 +25,25 @@ def liste_produits(request):
         )
 
     if categories:
-        produits = produits.filter(
-            categorie__in=categories
-        )
+        produits = produits.filter(categorie__in=categories)
 
     if prix_min:
-        produits = produits.filter(
-            prix__gte=prix_min
-        )
+        produits = produits.filter(prix__gte=prix_min)
 
     if prix_max:
-        produits = produits.filter(
-            prix__lte=prix_max
-        )
+        produits = produits.filter(prix__lte=prix_max)
 
     if nutriscores:
-        produits = produits.filter(
-            nutriscore__in=nutriscores
-        )
+        produits = produits.filter(nutriscore__in=nutriscores)
 
     if origines:
-        produits = produits.filter(
-            origine__in=origines
-        )
+        produits = produits.filter(origine__in=origines)
 
     for label in labels:
-
         if label in ["bio", "label_rouge", "aop", "igp"]:
-
-            produits = produits.filter(
-                **{label: True}
-            )
+            produits = produits.filter(**{label: True})
 
     paginator = Paginator(produits, 12)
-
     page_number = request.GET.get("page")
     produits = paginator.get_page(page_number)
 
@@ -66,43 +51,33 @@ def liste_produits(request):
     query_params.pop("page", None)
 
     return render(request, "produits/liste.html", {
-
         "produits": produits,
         "query_params": query_params.urlencode(),
-
         "categories": Produit.CATEGORIE_CHOICES,
         "selected_categories": categories,
-
         "nutriscores": Produit.NUTRISCORE_CHOICES,
         "selected_nutriscores": nutriscores,
-
         "selected_labels": labels,
         "selected_origines": origines,
-
         "recherche": recherche,
         "prix_min": prix_min,
         "prix_max": prix_max,
-
     })
 
 
 def ajouter_produit(request):
 
-    if request.method == "POST":
+    if not request.user.is_staff:
+        return redirect("liste_produits")
 
-        formulaire = ProduitForm(
-            request.POST,
-            request.FILES
-        )
+    if request.method == "POST":
+        formulaire = ProduitForm(request.POST, request.FILES)
 
         if formulaire.is_valid():
-
             formulaire.save()
-
             return redirect("liste_produits")
 
     else:
-
         formulaire = ProduitForm()
 
     return render(request, "produits/ajouter.html", {
@@ -112,13 +87,12 @@ def ajouter_produit(request):
 
 def modifier_produit(request, produit_id):
 
-    produit = get_object_or_404(
-        Produit,
-        id=produit_id
-    )
+    if not request.user.is_staff:
+        return redirect("liste_produits")
+
+    produit = get_object_or_404(Produit, id=produit_id)
 
     if request.method == "POST":
-
         formulaire = ProduitForm(
             request.POST,
             request.FILES,
@@ -126,16 +100,11 @@ def modifier_produit(request, produit_id):
         )
 
         if formulaire.is_valid():
-
             formulaire.save()
-
             return redirect("liste_produits")
 
     else:
-
-        formulaire = ProduitForm(
-            instance=produit
-        )
+        formulaire = ProduitForm(instance=produit)
 
     return render(request, "produits/modifier.html", {
         "formulaire": formulaire,
@@ -145,13 +114,12 @@ def modifier_produit(request, produit_id):
 
 def supprimer_produit(request, produit_id):
 
-    produit = get_object_or_404(
-        Produit,
-        id=produit_id
-    )
+    if not request.user.is_staff:
+        return redirect("liste_produits")
+
+    produit = get_object_or_404(Produit, id=produit_id)
 
     if request.method == "POST":
-
         produit.delete()
 
     return redirect("liste_produits")
