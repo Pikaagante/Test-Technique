@@ -1,0 +1,128 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'produits/css/factures.css' %}">
+<link rel="stylesheet" href="{% static 'produits/css/menu.css' %}">
+
+{% include "produits/partials/menu.html" %}
+
+<div class="factures-page">
+
+    <h1>Mes factures</h1>
+
+    <div class="factures">
+
+        {% for facture in factures %}
+
+            <div
+                class="carte-facture"
+                onclick="ouvrirFacture({{ facture.id }})"
+            >
+
+                <h2>
+                    Commande du {{ facture.date|date:"d/m/Y" }}
+                </h2>
+
+                {% if user.is_staff %}
+
+                    <p>
+                        Client :
+                        {{ facture.utilisateur }}
+                    </p>
+
+                {% endif %}
+
+                <p>
+                    Produits :
+                    {{ facture.nombre_produits }}
+                </p>
+
+                <strong>
+                    Total :
+                    {{ facture.total }} €
+                </strong>
+
+            </div>
+
+        {% empty %}
+
+            <p>
+                Vous n'avez encore aucune facture.
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% if factures.paginator.num_pages > 1 %}
+
+        <div class="pagination">
+
+            {% if factures.has_previous %}
+
+                <a href="?page={{ factures.previous_page_number }}">
+                    ← Précédente
+                </a>
+
+            {% endif %}
+
+
+            {% for numero in factures.paginator.page_range %}
+
+                {% if numero == factures.number %}
+
+                    <span class="page-actuelle">
+                        {{ numero }}
+                    </span>
+
+                {% else %}
+
+                    <a href="?page={{ numero }}">
+                        {{ numero }}
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if factures.has_next %}
+
+                <a href="?page={{ factures.next_page_number }}">
+                    Suivante →
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<div id="popup-facture" class="popup-facture">
+
+    <div class="popup-facture-contenu">
+
+        <button
+            class="fermer-facture"
+            onclick="fermerFacture()"
+        >
+            &times;
+        </button>
+
+        <div id="facture-infos">
+
+            <p>
+                Chargement...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'produits/js/factures.js' %}"></script>

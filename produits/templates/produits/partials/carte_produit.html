@@ -29,18 +29,42 @@
 
     <h2>{{ produit.nom }}</h2>
 
-    <p>Marque : {{ produit.marque }}</p>
+    <p>
+        Marque : {{ produit.marque }}
+    </p>
 
-    <p>Prix : {{ produit.prix }} €</p>
+    <p>
+        Prix : {{ produit.prix }} €
+    </p>
 
     {% if produit.gramme %}
-        <p>Poids : {{ produit.gramme }} g</p>
-        <p>Prix au kg : {{ produit.prixkg }} €/kg</p>
+
+        <p>
+            Poids : {{ produit.gramme }} g
+        </p>
+
+        <p>
+            Prix au kg : {{ produit.prixkg }} €/kg
+        </p>
+
     {% endif %}
 
     {% if produit.litre %}
-        <p>Volume : {{ produit.litre }} L</p>
-        <p>Prix au litre : {{ produit.prixlitre }} €/L</p>
+
+        <p>
+            Volume : {{ produit.litre }} L
+        </p>
+
+        <p>
+            Prix au litre : {{ produit.prixlitre }} €/L
+        </p>
+
     {% endif %}
+
+    <button
+        onclick="ajouterAuPanier(event, {{ produit.id }})"
+    >
+        Ajouter
+    </button>
 
 </div>

@@ -1,3 +1,7 @@
+<script>
+    const utilisateurConnecte = {{ user.is_authenticated|yesno:"true,false" }};
+</script>
+
 <nav class="menu">
 
     <div class="menu-gauche">
@@ -10,9 +14,21 @@
             Produits
         </a>
 
-        <a href="#">
-            Factures
+        <a href="{% url 'liste_factures' %}">
+            🧾 Factures
         </a>
+
+        <div class="panier">
+
+            <button
+                class="panier-bouton"
+                onclick="ouvrirPanier()"
+            >
+                🛍️
+                <span id="nombre-produits">0</span>
+            </button>
+
+        </div>
 
         {% if user.is_staff %}
 
@@ -41,7 +57,7 @@
                         Mon profil
                     </a>
 
-                    <a href="#">
+                    <a href="{% url 'liste_factures' %}">
                         Mes factures
                     </a>
 
@@ -68,3 +84,44 @@
     </div>
 
 </nav>
+
+
+<div id="popup-panier" class="popup-panier">
+
+    <div class="popup-panier-contenu">
+
+        <button
+            class="fermer-panier"
+            onclick="fermerPanier()"
+        >
+            &times;
+        </button>
+
+        <h2>Ma facture</h2>
+
+        <div id="panier-contenu">
+
+            <p>
+                Votre facture est vide.
+            </p>
+
+        </div>
+
+        <div class="panier-bas">
+
+            <strong>
+                Total :
+                <span id="panier-total">0.00</span> €
+            </strong>
+
+            <button onclick="confirmerFacture()">
+                Confirmer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="notification" class="notification"></div>

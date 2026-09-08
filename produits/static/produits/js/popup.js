@@ -11,17 +11,39 @@ function ouvrirProduit(id) {
                 : ""
         }
 
-        <p><strong>Catégorie :</strong> ${produit.categorie}</p>
-        <p><strong>Marque :</strong> ${produit.marque}</p>
-        <p><strong>Description :</strong> ${produit.description}</p>
-        <p><strong>Prix :</strong> ${produit.prix} €</p>
+        <p>
+            <strong>Catégorie :</strong>
+            ${produit.categorie}
+        </p>
+
+        <p>
+            <strong>Marque :</strong>
+            ${produit.marque}
+        </p>
+
+        <p>
+            <strong>Description :</strong>
+            ${produit.description}
+        </p>
+
+        <p>
+            <strong>Prix :</strong>
+            ${produit.prix} €
+        </p>
     `;
 
     if (produit.gramme) {
 
         html += `
-            <p><strong>Poids :</strong> ${produit.gramme} g</p>
-            <p><strong>Prix au kg :</strong> ${produit.prixkg} €/kg</p>
+            <p>
+                <strong>Poids :</strong>
+                ${produit.gramme} g
+            </p>
+
+            <p>
+                <strong>Prix au kg :</strong>
+                ${produit.prixkg} €/kg
+            </p>
         `;
 
     }
@@ -29,20 +51,60 @@ function ouvrirProduit(id) {
     if (produit.litre) {
 
         html += `
-            <p><strong>Volume :</strong> ${produit.litre} L</p>
-            <p><strong>Prix au litre :</strong> ${produit.prixlitre} €/L</p>
+            <p>
+                <strong>Volume :</strong>
+                ${produit.litre} L
+            </p>
+
+            <p>
+                <strong>Prix au litre :</strong>
+                ${produit.prixlitre} €/L
+            </p>
         `;
 
     }
 
     html += `
-        <p><strong>Date de péremption :</strong> ${produit.date_peremption}</p>
-        <p><strong>Origine :</strong> ${produit.origine}</p>
-        <p><strong>Nutri-Score :</strong> ${produit.nutriscore}</p>
-        <p><strong>Bio :</strong> ${produit.bio ? "Oui" : "Non"}</p>
-        <p><strong>Label Rouge :</strong> ${produit.label_rouge ? "Oui" : "Non"}</p>
-        <p><strong>AOP :</strong> ${produit.aop ? "Oui" : "Non"}</p>
-        <p><strong>IGP :</strong> ${produit.igp ? "Oui" : "Non"}</p>
+        <p>
+            <strong>Date de péremption :</strong>
+            ${produit.date_peremption}
+        </p>
+
+        <p>
+            <strong>Origine :</strong>
+            ${produit.origine}
+        </p>
+
+        <p>
+            <strong>Nutri-Score :</strong>
+            ${produit.nutriscore}
+        </p>
+
+        <p>
+            <strong>Bio :</strong>
+            ${produit.bio ? "Oui" : "Non"}
+        </p>
+
+        <p>
+            <strong>Label Rouge :</strong>
+            ${produit.label_rouge ? "Oui" : "Non"}
+        </p>
+
+        <p>
+            <strong>AOP :</strong>
+            ${produit.aop ? "Oui" : "Non"}
+        </p>
+
+        <p>
+            <strong>IGP :</strong>
+            ${produit.igp ? "Oui" : "Non"}
+        </p>
+
+        <button
+            onclick="ajouterAuPanier(event, ${id})"
+        >
+            Ajouter
+        </button>
     `;
 
     if (estAdmin) {

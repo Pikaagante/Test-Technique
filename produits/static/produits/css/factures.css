@@ -1,0 +1,151 @@
+.factures-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 30px;
+}
+
+.factures {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(280px, 1fr));
+
+    gap: 20px;
+}
+
+.carte-facture {
+    padding: 20px;
+
+    background-color: white;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.carte-facture:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+.carte-facture h2 {
+    margin-top: 0;
+}
+
+.carte-facture p {
+    color: #555;
+}
+
+.carte-facture strong {
+    font-size: 18px;
+}
+
+
+/* Popup */
+
+.popup-facture {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background-color:
+        rgba(0, 0, 0, 0.4);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.popup-facture-contenu {
+    position: relative;
+
+    width: 700px;
+    max-width: 90%;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    padding: 30px;
+
+    background-color: white;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.25);
+}
+
+.fermer-facture {
+    position: absolute;
+
+    top: 15px;
+    right: 20px;
+
+    border: none;
+
+    background: none;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+/* Produits de la facture */
+
+.ligne-facture {
+    display: grid;
+
+    grid-template-columns:
+        1fr auto auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.ligne-facture small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #666;
+}
+
+.facture-quantite {
+    white-space: nowrap;
+}
+
+.facture-prix {
+    min-width: 100px;
+
+    text-align: right;
+}
+
+
+/* Résumé */
+
+.resume-facture {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 25px;
+
+    font-size: 18px;
+}
