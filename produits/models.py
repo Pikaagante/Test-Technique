@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Produit(models.Model):
@@ -77,8 +78,11 @@ class Produit(models.Model):
     igp = models.BooleanField(default=False)
 
 class Facture(models.Model):
+    utilisateur = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
     date_creation = models.DateTimeField(auto_now_add=True)
-
 
 class ContenuFacture(models.Model):
     facture = models.ForeignKey(Facture, on_delete=models.CASCADE)

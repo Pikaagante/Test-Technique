@@ -1,12 +1,9 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'produits/css/liste.css' %}">
+<link rel="stylesheet" href="{% static 'produits/css/menu.css' %}">
 
-<h1>Mes produits</h1>
-
-<a href="{% url 'ajouter_produit' %}">
-    Ajouter un produit
-</a>
+{% include "produits/partials/menu.html" %}
 
 <div class="conteneur">
 
@@ -101,6 +98,8 @@
 
 <script>
 
+    const estAdmin = {{ user.is_staff|yesno:"true,false" }};
+
     const produits = {
 
         {% for produit in produits %}
@@ -132,7 +131,6 @@
     };
 
 </script>
-
 
 <script src="{% static 'produits/js/filtres.js' %}"></script>
 <script src="{% static 'produits/js/popup.js' %}"></script>

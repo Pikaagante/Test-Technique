@@ -7,8 +7,15 @@ from .views.produits import (
     supprimer_produit,
 )
 
+from .views.comptes import (
+    inscription,
+    connexion,
+    deconnexion,
+)
+
 
 urlpatterns = [
+
     path(
         "produits/",
         liste_produits,
@@ -32,4 +39,23 @@ urlpatterns = [
         supprimer_produit,
         name="supprimer_produit"
     ),
+
+    path(
+        "inscription/",
+        inscription,
+        name="inscription"
+    ),
+
+    path(
+        "connexion/",
+        connexion,
+        name="connexion"
+    ),
+
+    path(
+        "deconnexion/",
+        deconnexion,
+        name="deconnexion"
+    ),
+
 ]

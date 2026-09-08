@@ -1,0 +1,70 @@
+<nav class="menu">
+
+    <div class="menu-gauche">
+
+        <a href="{% url 'liste_produits' %}" class="logo">
+            🛒 MonShop
+        </a>
+
+        <a href="{% url 'liste_produits' %}">
+            Produits
+        </a>
+
+        <a href="#">
+            Factures
+        </a>
+
+        {% if user.is_staff %}
+
+            <a href="{% url 'ajouter_produit' %}">
+                Ajouter un produit
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="menu-droite">
+
+        {% if user.is_authenticated %}
+
+            <div class="profil">
+
+                <button class="profil-bouton">
+                    👤 {{ user.username }} ▼
+                </button>
+
+                <div class="profil-menu">
+
+                    <a href="#">
+                        Mon profil
+                    </a>
+
+                    <a href="#">
+                        Mes factures
+                    </a>
+
+                    <a href="{% url 'deconnexion' %}">
+                        Déconnexion
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <a href="{% url 'connexion' %}">
+                Se connecter
+            </a>
+
+            <a href="{% url 'inscription' %}">
+                S'inscrire
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>

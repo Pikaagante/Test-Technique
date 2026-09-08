@@ -1,0 +1,80 @@
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 30px;
+    margin-bottom: 30px;
+
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.menu-gauche,
+.menu-droite {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.menu a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.menu a:hover {
+    color: #007bff;
+}
+
+.logo {
+    font-size: 20px !important;
+    font-weight: bold;
+    color: #007bff !important;
+}
+
+.profil {
+    position: relative;
+}
+
+.profil-bouton {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    font-size: 16px;
+    color: #333;
+}
+
+.profil-menu {
+    display: none;
+
+    position: absolute;
+    right: 0;
+    top: 100%;
+
+    min-width: 160px;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+    overflow: hidden;
+}
+
+.profil-menu a {
+    display: block;
+    padding: 12px 15px;
+}
+
+.profil-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+.profil:hover .profil-menu {
+    display: block;
+}

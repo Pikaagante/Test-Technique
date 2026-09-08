@@ -1,6 +1,9 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'produits/css/formulaire.css' %}">
+<link rel="stylesheet" href="{% static 'produits/css/menu.css' %}">
+
+{% include "produits/partials/menu.html" %}
 
 <h1>Modifier {{ produit.nom }}</h1>
 

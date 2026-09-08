@@ -1,0 +1,98 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'produits/css/formulaire.css' %}">
+<link rel="stylesheet" href="{% static 'produits/css/menu.css' %}">
+
+{% include "produits/partials/menu.html" %}
+
+<h1>Inscription</h1>
+
+{% if erreur %}
+    <p>{{ erreur }}</p>
+{% endif %}
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <p>
+        <label for="username">
+            Nom d'utilisateur
+        </label>
+
+        <input
+            type="text"
+            id="username"
+            name="username"
+            required
+        >
+    </p>
+
+    <p>
+        <label for="password">
+            Mot de passe
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            name="password"
+            required
+        >
+    </p>
+
+    <p>
+        <label for="confirmation">
+            Confirmer le mot de passe
+        </label>
+
+        <input
+            type="password"
+            id="confirmation"
+            name="confirmation"
+            required
+        >
+    </p>
+
+    <p>
+        <strong>Type de compte :</strong>
+    </p>
+
+    <label>
+        <input
+            type="radio"
+            name="type_compte"
+            value="utilisateur"
+            checked
+        >
+        Utilisateur
+    </label>
+
+    <label>
+        <input
+            type="radio"
+            name="type_compte"
+            value="admin"
+        >
+        Administrateur
+    </label>
+
+    <p>
+        ⚠️ <strong>TEST</strong>
+        La création d'un compte administrateur sera supprimée avant la mise en production.
+        Cette option est actuellement présente uniquement pour tester l'ajout de produits
+        via un compte administrateur.
+    </p>
+
+    <button type="submit">
+        S'inscrire
+    </button>
+
+</form>
+
+<p>
+    Déjà un compte ?
+    <a href="{% url 'connexion' %}">
+        Se connecter
+    </a>
+</p>

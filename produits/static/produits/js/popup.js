@@ -43,19 +43,25 @@ function ouvrirProduit(id) {
         <p><strong>Label Rouge :</strong> ${produit.label_rouge ? "Oui" : "Non"}</p>
         <p><strong>AOP :</strong> ${produit.aop ? "Oui" : "Non"}</p>
         <p><strong>IGP :</strong> ${produit.igp ? "Oui" : "Non"}</p>
-
-        <div class="actions-produit">
-
-            <button onclick="modifierProduit(${id})">
-                Modifier
-            </button>
-
-            <button onclick="supprimerProduit(${id})">
-                Supprimer
-            </button>
-
-        </div>
     `;
+
+    if (estAdmin) {
+
+        html += `
+            <div class="actions-produit">
+
+                <button onclick="modifierProduit(${id})">
+                    Modifier
+                </button>
+
+                <button onclick="supprimerProduit(${id})">
+                    Supprimer
+                </button>
+
+            </div>
+        `;
+
+    }
 
     document.getElementById("popup-infos").innerHTML = html;
 
@@ -122,6 +128,7 @@ function getCookie(name) {
     return null;
 
 }
+
 
 function modifierProduit(id) {
 
