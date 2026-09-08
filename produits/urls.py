@@ -21,6 +21,8 @@ from .views.panier import (
 )
 
 from .views.factures import (
+    commencer_modification_facture,
+    annuler_modification_facture,
     confirmer_facture,
     liste_factures,
     detail_facture,
@@ -30,7 +32,11 @@ from .views.factures import (
 
 urlpatterns = [
 
-    path("", liste_produits, name="liste_produits"),
+    path(
+        "",
+        liste_produits,
+        name="liste_produits"
+    ),
 
     path(
         "produits/ajouter/",
@@ -97,7 +103,7 @@ urlpatterns = [
         confirmer_facture,
         name="confirmer_facture"
     ),
-    
+
     path(
         "factures/",
         liste_factures,
@@ -109,7 +115,19 @@ urlpatterns = [
         detail_facture,
         name="detail_facture"
     ),
-    
+
+    path(
+        "factures/<int:facture_id>/modifier/",
+        commencer_modification_facture,
+        name="commencer_modification_facture"
+    ),
+
+    path(
+        "factures/annuler-modification/",
+        annuler_modification_facture,
+        name="annuler_modification_facture"
+    ),
+
     path(
         "factures/<int:facture_id>/supprimer/",
         supprimer_facture,

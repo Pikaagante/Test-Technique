@@ -129,3 +129,4 @@ MAILERS = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "Ex2" / "media"
+LOGIN_URL = "/connexion/"

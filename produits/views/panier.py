@@ -6,13 +6,21 @@ from ..models import Produit
 
 def ajouter_panier(request, produit_id):
 
-    produit = get_object_or_404(Produit, id=produit_id)
+    produit = get_object_or_404(
+        Produit,
+        id=produit_id
+    )
 
-    panier = request.session.get("panier", {})
+    panier = request.session.get(
+        "panier",
+        {}
+    )
 
     produit_id = str(produit.id)
 
-    panier[produit_id] = panier.get(produit_id, 0) + 1
+    panier[produit_id] = (
+        panier.get(produit_id, 0) + 1
+    )
 
     request.session["panier"] = panier
     request.session.modified = True
@@ -24,17 +32,46 @@ def ajouter_panier(request, produit_id):
 
 def modifier_quantite(request, produit_id):
 
-    get_object_or_404(Produit, id=produit_id)
+    get_object_or_404(
+        Produit,
+        id=produit_id
+    )
 
-    panier = request.session.get("panier", {})
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False,
+            "message": "Méthode non autorisée."
+        }, status=405)
+
+    panier = request.session.get(
+        "panier",
+        {}
+    )
 
     produit_id = str(produit_id)
 
-    quantite = int(request.POST.get("quantite", 1))
+    try:
+        quantite = int(
+            request.POST.get(
+                "quantite",
+                1
+            )
+        )
+    except (ValueError, TypeError):
+        return JsonResponse({
+            "success": False,
+            "message": "Quantité invalide."
+        }, status=400)
 
     if quantite <= 0:
-        panier.pop(produit_id, None)
+
+        panier.pop(
+            produit_id,
+            None
+        )
+
     else:
+
         panier[produit_id] = quantite
 
     request.session["panier"] = panier
@@ -47,11 +84,23 @@ def modifier_quantite(request, produit_id):
 
 def supprimer_panier(request, produit_id):
 
-    panier = request.session.get("panier", {})
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False,
+            "message": "Méthode non autorisée."
+        }, status=405)
+
+    panier = request.session.get(
+        "panier",
+        {}
+    )
 
     produit_id = str(produit_id)
 
-    panier.pop(produit_id, None)
+    panier.pop(
+        produit_id,
+        None
+    )
 
     request.session["panier"] = panier
     request.session.modified = True
@@ -63,20 +112,30 @@ def supprimer_panier(request, produit_id):
 
 def afficher_panier(request):
 
-    panier = request.session.get("panier", {})
+    panier = request.session.get(
+        "panier",
+        {}
+    )
 
     produits = Produit.objects.filter(
         id__in=panier.keys()
     )
 
     liste = []
+
     nombre_produits = 0
     total = 0
 
     for produit in produits:
 
-        quantite = panier.get(str(produit.id), 0)
-        sous_total = produit.prix * quantite
+        quantite = panier.get(
+            str(produit.id),
+            0
+        )
+
+        sous_total = (
+            produit.prix * quantite
+        )
 
         liste.append({
             "id": produit.id,
@@ -94,4 +153,7 @@ def afficher_panier(request):
         "produits": liste,
         "nombre_produits": nombre_produits,
         "total": str(total),
+        "modification": request.session.get(
+            "facture_modification"
+        )
     })

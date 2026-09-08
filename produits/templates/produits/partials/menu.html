@@ -1,7 +1,3 @@
-<script>
-    const utilisateurConnecte = {{ user.is_authenticated|yesno:"true,false" }};
-</script>
-
 <nav class="menu">
 
     <div class="menu-gauche">
@@ -14,18 +10,19 @@
             Produits
         </a>
 
-        <a href="{% url 'liste_factures' %}">
-            🧾 Factures
-        </a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'liste_factures' %}">
+                🧾 Factures
+            </a>
+        {% endif %}
 
         <div class="panier">
 
-            <button
-                class="panier-bouton"
-                onclick="ouvrirPanier()"
-            >
+            <button class="panier-bouton" onclick="ouvrirPanier()">
                 🛍️
-                <span id="nombre-produits">0</span>
+                <span id="nombre-produits">
+                    0
+                </span>
             </button>
 
         </div>
@@ -91,37 +88,59 @@
     <div class="popup-panier-contenu">
 
         <button
+            type="button"
             class="fermer-panier"
             onclick="fermerPanier()"
         >
-            &times;
+            ×
         </button>
 
-        <h2>Ma facture</h2>
+        <h2 id="panier-titre">
+            Votre panier
+        </h2>
 
         <div id="panier-contenu">
-
-            <p>
-                Votre facture est vide.
-            </p>
-
         </div>
 
         <div class="panier-bas">
 
             <strong>
                 Total :
-                <span id="panier-total">0.00</span> €
+                <span id="panier-total">
+                    0 €
+                </span>
             </strong>
 
-            <button onclick="confirmerFacture()">
-                Confirmer
+            <button
+                type="button"
+                id="confirmer-panier"
+                onclick="confirmerFacture()"
+            >
+                Confirmer la commande
             </button>
 
         </div>
+
+        <button
+            type="button"
+            id="annuler-modification"
+            class="annuler-modification"
+            onclick="annulerModification()"
+        >
+            Annuler la modification
+        </button>
 
     </div>
 
 </div>
 
+
 <div id="notification" class="notification"></div>
+
+
+<script>
+
+    const utilisateurConnecte =
+        {{ user.is_authenticated|yesno:"true,false" }};
+
+</script>

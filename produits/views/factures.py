@@ -6,6 +6,81 @@ from django.core.paginator import Paginator
 from ..models import Facture, ContenuFacture, Produit
 
 
+def utilisateur_peut_modifier(request, facture):
+    return (
+        request.user.is_staff
+        or facture.utilisateur == request.user
+    )
+
+
+@login_required
+def commencer_modification_facture(request, facture_id):
+
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False,
+            "message": "Méthode non autorisée."
+        }, status=405)
+
+    facture = get_object_or_404(
+        Facture,
+        id=facture_id
+    )
+
+    if not utilisateur_peut_modifier(request, facture):
+        return JsonResponse({
+            "success": False,
+            "message": "Vous n'avez pas accès à cette facture."
+        }, status=403)
+
+    contenus = ContenuFacture.objects.filter(
+        facture=facture
+    )
+
+    panier = {}
+
+    for contenu in contenus:
+        panier[str(contenu.produit_id)] = contenu.quantite
+
+    # On garde l'ancien panier pour pouvoir annuler
+    request.session["panier_avant_modification"] = (
+        request.session.get("panier", {})
+    )
+
+    request.session["panier"] = panier
+    request.session["facture_modification"] = facture.id
+    request.session.modified = True
+
+    return JsonResponse({
+        "success": True,
+        "redirect": "/"
+    })
+
+
+@login_required
+def annuler_modification_facture(request):
+
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False,
+            "message": "Méthode non autorisée."
+        }, status=405)
+
+    ancien_panier = request.session.get(
+        "panier_avant_modification",
+        {}
+    )
+
+    request.session["panier"] = ancien_panier
+    request.session.pop("panier_avant_modification", None)
+    request.session.pop("facture_modification", None)
+    request.session.modified = True
+
+    return JsonResponse({
+        "success": True
+    })
+
+
 @login_required
 def confirmer_facture(request):
 
@@ -23,11 +98,97 @@ def confirmer_facture(request):
             "message": "Votre panier est vide."
         }, status=400)
 
+    facture_id = request.session.get(
+        "facture_modification"
+    )
+
+    # Modification d'une facture existante
+    if facture_id:
+
+        facture = get_object_or_404(
+            Facture,
+            id=facture_id
+        )
+
+        if not utilisateur_peut_modifier(request, facture):
+            return JsonResponse({
+                "success": False,
+                "message": "Vous n'avez pas accès à cette facture."
+            }, status=403)
+
+        contenus_existants = {
+            contenu.produit_id: contenu
+            for contenu in ContenuFacture.objects.filter(
+                facture=facture
+            )
+        }
+
+        produits_panier = set()
+
+        for produit_id, quantite in panier.items():
+
+            try:
+                quantite = int(quantite)
+            except (ValueError, TypeError):
+                continue
+
+            if quantite <= 0:
+                continue
+
+            produit = Produit.objects.filter(
+                id=produit_id
+            ).first()
+
+            if produit is None:
+                continue
+
+            produits_panier.add(produit.id)
+
+            if produit.id in contenus_existants:
+
+                contenu = contenus_existants[produit.id]
+                contenu.quantite = quantite
+                contenu.save()
+
+            else:
+
+                ContenuFacture.objects.create(
+                    facture=facture,
+                    produit=produit,
+                    quantite=quantite,
+                    prix_unitaire=produit.prix
+                )
+
+        for produit_id, contenu in contenus_existants.items():
+
+            if produit_id not in produits_panier:
+                contenu.delete()
+
+        request.session["panier"] = {}
+        request.session.pop("panier_avant_modification", None)
+        request.session.pop("facture_modification", None)
+        request.session.modified = True
+
+        return JsonResponse({
+            "success": True,
+            "facture_id": facture.id,
+            "modification": True
+        })
+
+    # Création d'une nouvelle facture
     facture = Facture.objects.create(
         utilisateur=request.user
     )
 
     for produit_id, quantite in panier.items():
+
+        try:
+            quantite = int(quantite)
+        except (ValueError, TypeError):
+            continue
+
+        if quantite <= 0:
+            continue
 
         produit = Produit.objects.filter(
             id=produit_id
@@ -48,7 +209,8 @@ def confirmer_facture(request):
 
     return JsonResponse({
         "success": True,
-        "facture_id": facture.id
+        "facture_id": facture.id,
+        "modification": False
     })
 
 
@@ -81,9 +243,10 @@ def liste_factures(request):
         for contenu in contenus:
 
             nombre_produits += contenu.quantite
+
             total += (
-                contenu.prix_unitaire *
-                contenu.quantite
+                contenu.prix_unitaire
+                * contenu.quantite
             )
 
         liste_factures.append({
@@ -94,15 +257,24 @@ def liste_factures(request):
             "total": total,
         })
 
-    paginator = Paginator(liste_factures, 12)
+    paginator = Paginator(
+        liste_factures,
+        12
+    )
 
     page_number = request.GET.get("page")
 
-    factures = paginator.get_page(page_number)
+    factures = paginator.get_page(
+        page_number
+    )
 
-    return render(request, "produits/facture.html", {
-        "factures": factures
-    })
+    return render(
+        request,
+        "produits/facture.html",
+        {
+            "factures": factures
+        }
+    )
 
 
 @login_required
@@ -113,7 +285,7 @@ def detail_facture(request, facture_id):
         id=facture_id
     )
 
-    if not request.user.is_staff and facture.utilisateur != request.user:
+    if not utilisateur_peut_modifier(request, facture):
 
         return JsonResponse({
             "success": False,
@@ -132,27 +304,25 @@ def detail_facture(request, facture_id):
     for contenu in contenus:
 
         sous_total = (
-            contenu.prix_unitaire *
-            contenu.quantite
+            contenu.prix_unitaire
+            * contenu.quantite
         )
 
         produits.append({
+            "id": contenu.produit.id,
             "nom": contenu.produit.nom,
             "marque": contenu.produit.marque,
             "quantite": contenu.quantite,
             "prix_unitaire": str(
                 contenu.prix_unitaire
             ),
-            "sous_total": str(sous_total),
+            "sous_total": str(
+                sous_total
+            ),
         })
 
         nombre_produits += contenu.quantite
         total += sous_total
-
-    peut_supprimer = (
-        request.user.is_staff
-        or facture.utilisateur == request.user
-    )
 
     return JsonResponse({
         "success": True,
@@ -164,7 +334,14 @@ def detail_facture(request, facture_id):
             "utilisateur": facture.utilisateur.username,
             "nombre_produits": nombre_produits,
             "total": str(total),
-            "peut_supprimer": peut_supprimer,
+            "peut_modifier": utilisateur_peut_modifier(
+                request,
+                facture
+            ),
+            "peut_supprimer": utilisateur_peut_modifier(
+                request,
+                facture
+            ),
             "produits": produits,
         }
     })
@@ -185,7 +362,10 @@ def supprimer_facture(request, facture_id):
         id=facture_id
     )
 
-    if not request.user.is_staff and facture.utilisateur != request.user:
+    if not utilisateur_peut_modifier(
+        request,
+        facture
+    ):
 
         return JsonResponse({
             "success": False,

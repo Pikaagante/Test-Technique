@@ -1,7 +1,12 @@
 function ouvrirFacture(id) {
 
-    const popup = document.getElementById("popup-facture");
-    const infos = document.getElementById("facture-infos");
+    const popup = document.getElementById(
+        "popup-facture"
+    );
+
+    const infos = document.getElementById(
+        "facture-infos"
+    );
 
     infos.innerHTML = `
         <p>Chargement...</p>
@@ -25,39 +30,24 @@ function ouvrirFacture(id) {
             const facture = data.facture;
 
             let html = `
-
                 <h2>
                     Commande du ${facture.date.split(" à ")[0]}
                 </h2>
 
-            `;
+                <p>
+                    <strong>Client :</strong>
+                    ${facture.utilisateur}
+                </p>
 
-            if (facture.utilisateur) {
-
-                html += `
-
-                    <p>
-                        <strong>Client :</strong>
-                        ${facture.utilisateur}
-                    </p>
-
-                `;
-
-            }
-
-            html += `
                 <hr>
             `;
-
 
             facture.produits.forEach(produit => {
 
                 html += `
-
                     <div class="ligne-facture">
 
                         <div>
-
                             <strong>
                                 ${produit.nom}
                             </strong>
@@ -65,10 +55,9 @@ function ouvrirFacture(id) {
                             <small>
                                 ${produit.marque}
                             </small>
-
                         </div>
 
-                        <span class="facture-quantite">
+                        <span>
                             × ${produit.quantite}
                         </span>
 
@@ -77,14 +66,11 @@ function ouvrirFacture(id) {
                         </span>
 
                     </div>
-
                 `;
 
             });
 
-
             html += `
-
                 <div class="resume-facture">
 
                     <strong>
@@ -98,27 +84,86 @@ function ouvrirFacture(id) {
                     </strong>
 
                 </div>
-
             `;
 
-
-            if (facture.peut_supprimer) {
+            if (facture.peut_modifier) {
 
                 html += `
+                    <div class="actions-facture">
 
-                    <button
-                        class="supprimer-facture"
-                        onclick="supprimerFacture(event, ${facture.id})"
-                    >
-                        🗑️ Supprimer la facture
-                    </button>
+                        <button
+                            class="modifier-facture"
+                            onclick="modifierFacture(${facture.id})"
+                        >
+                            Modifier
+                        </button>
 
+                        <button
+                            class="supprimer-facture"
+                            onclick="supprimerFacture(event, ${facture.id})"
+                        >
+                            🗑️ Supprimer
+                        </button>
+
+                    </div>
                 `;
-
             }
 
-
             infos.innerHTML = html;
+
+        });
+
+}
+
+
+function modifierFacture(id) {
+
+    const bouton = document.querySelector(
+        ".modifier-facture"
+    );
+
+    if (bouton) {
+        bouton.disabled = true;
+    }
+
+    fetch(
+        `/factures/${id}/modifier/`,
+        {
+            method: "POST",
+
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            }
+        }
+    )
+        .then(response => response.json())
+        .then(data => {
+
+            if (!data.success) {
+
+                afficherNotification(
+                    data.message
+                );
+
+                if (bouton) {
+                    bouton.disabled = false;
+                }
+
+                return;
+            }
+
+            window.location.href = data.redirect;
+
+        })
+        .catch(() => {
+
+            afficherNotification(
+                "Une erreur est survenue."
+            );
+
+            if (bouton) {
+                bouton.disabled = false;
+            }
 
         });
 
@@ -138,28 +183,31 @@ function supprimerFacture(event, id) {
 
     event.stopPropagation();
 
-    fetch(`/factures/${id}/supprimer/`, {
+    fetch(
+        `/factures/${id}/supprimer/`,
+        {
+            method: "POST",
 
-        method: "POST",
-
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            }
         }
+    )
+        .then(response => response.json())
+        .then(data => {
 
-    })
-    .then(response => response.json())
-    .then(data => {
+            if (!data.success) {
 
-        if (!data.success) {
+                afficherNotification(
+                    data.message
+                );
 
-            afficherNotification(data.message);
+                return;
+            }
 
-            return;
-        }
+            location.reload();
 
-        location.reload();
-
-    });
+        });
 
 }
 
@@ -179,19 +227,47 @@ function getCookie(name) {
     }
 
     return null;
+}
+
+
+function afficherNotification(message) {
+
+    const notification =
+        document.getElementById(
+            "notification"
+        );
+
+    notification.textContent = message;
+
+    notification.classList.add(
+        "visible"
+    );
+
+    setTimeout(() => {
+
+        notification.classList.remove(
+            "visible"
+        );
+
+    }, 3000);
 
 }
 
 
-document.addEventListener("click", function(event) {
+document.addEventListener(
+    "click",
+    function(event) {
 
-    const popup =
-        document.getElementById("popup-facture");
+        const popup =
+            document.getElementById(
+                "popup-facture"
+            );
 
-    if (event.target === popup) {
-
-        fermerFacture();
+        if (
+            event.target === popup
+        ) {
+            fermerFacture();
+        }
 
     }
-
-});
+);
