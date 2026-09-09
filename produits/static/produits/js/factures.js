@@ -4,7 +4,7 @@ function ouvrirFacture(id) {
     const infos = document.getElementById("facture-infos");
 
     infos.innerHTML = "<p>Chargement...</p>";
-    popup.style.display = "flex";
+    popup.classList.add("visible");
 
     fetch(`/factures/${id}/`)
         .then(response => response.json())
@@ -15,77 +15,74 @@ function ouvrirFacture(id) {
             }
 
             const facture = data.facture;
+            const dateSeule = facture.date.split(" à ")[0];
 
             let html = `
-                <h2>Commande du ${facture.date.split(" à ")[0]}</h2>
+                <h2>Commande du ${dateSeule}</h2>
 
-                <p>
-                    <strong>Client :</strong>
-                    ${facture.utilisateur}
-                </p>
-
-                <hr>
+                <div class="facture-entete">
+                    <div class="facture-info">
+                        <h3>Client</h3>
+                        <p>${facture.utilisateur}</p>
+                    </div>
+                    <div class="facture-info">
+                        <h3>Date</h3>
+                        <p>${dateSeule}</p>
+                    </div>
+                </div>
             `;
 
             facture.produits.forEach(produit => {
                 html += `
                     <div class="ligne-facture">
                         <div>
-                            <strong>${produit.nom}</strong>
-                            <small>${produit.marque}</small>
+                            <div class="facture-produit-nom">${produit.nom}</div>
+                            <div class="facture-produit-detail">${produit.marque}</div>
                         </div>
-
-                        <span>× ${produit.quantite}</span>
-
-                        <span class="facture-prix">
-                            ${produit.sous_total} €
-                        </span>
+                        <div class="facture-quantite">× ${produit.quantite}</div>
+                        <div class="facture-prix">${produit.sous_total} €</div>
                     </div>
                 `;
             });
 
             html += `
                 <div class="resume-facture">
-                    <strong>
-                        Nombre de produits :
-                        ${facture.nombre_produits}
-                    </strong>
-
-                    <strong>
-                        Total :
-                        ${facture.total} €
-                    </strong>
+                    <strong>Nombre de produits : ${facture.nombre_produits}</strong>
+                    <span>Total : <strong>${facture.total} €</strong></span>
                 </div>
             `;
 
             if (facture.peut_modifier) {
                 html += `
-                    <div class="actions-facture">
+                    <div class="facture-actions">
                         <button
-                            class="modifier-facture"
+                            class="btn-modifier"
                             onclick="modifierFacture(${facture.id})"
                         >
                             Modifier
                         </button>
-
                         <button
-                            class="supprimer-facture"
+                            class="btn-supprimer"
                             onclick="supprimerFacture(event, ${facture.id})"
                         >
-                            🗑️ Supprimer
+                            Supprimer
                         </button>
                     </div>
                 `;
             }
 
             infos.innerHTML = html;
+        })
+        .catch(error => {
+            infos.innerHTML = "<p>Erreur lors du chargement de la facture.</p>";
+            console.error(error);
         });
 }
 
 
 // Commence la modification d'une facture
 function modifierFacture(id) {
-    const bouton = document.querySelector(".modifier-facture");
+    const bouton = document.querySelector(".btn-modifier");
 
     if (bouton) {
         bouton.disabled = true;
@@ -123,13 +120,17 @@ function modifierFacture(id) {
 
 // Ferme le popup
 function fermerFacture() {
-    document.getElementById("popup-facture").style.display = "none";
+    document.getElementById("popup-facture").classList.remove("visible");
 }
 
 
 // Supprime une facture
 function supprimerFacture(event, id) {
     event.stopPropagation();
+
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cette facture ?")) {
+        return;
+    }
 
     fetch(`/factures/${id}/supprimer/`, {
         method: "POST",
@@ -144,7 +145,11 @@ function supprimerFacture(event, id) {
                 return;
             }
 
+            fermerFacture();
             location.reload();
+        })
+        .catch(() => {
+            afficherNotification("Une erreur est survenue lors de la suppression.");
         });
 }
 

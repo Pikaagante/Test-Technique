@@ -8,7 +8,7 @@
 <h1>Inscription</h1>
 
 {% if erreur %}
-    <p>{{ erreur }}</p>
+    <p class="erreur">{{ erreur }}</p>
 {% endif %}
 
 <form method="post">
@@ -16,8 +16,9 @@
     {% csrf_token %}
 
     <p>
-        <label for="username"> Nom d'utilisateur </label>
-
+        <label for="username">
+            Nom d'utilisateur
+        </label>
         <input
             type="text"
             id="username"
@@ -30,7 +31,6 @@
         <label for="password">
             Mot de passe
         </label>
-
         <input
             type="password"
             id="password"
@@ -43,7 +43,6 @@
         <label for="confirmation">
             Confirmer le mot de passe
         </label>
-
         <input
             type="password"
             id="confirmation"
@@ -56,28 +55,34 @@
         <strong>Type de compte :</strong>
     </p>
 
-    <label>
+    <p>
         <input
             type="radio"
+            id="type_user"
             name="type_compte"
             value="utilisateur"
             checked
-        > Utilisateur
-    </label>
-
-    <label>
-        <input
-            type="radio"
-            name="type_compte"
-            value="admin"
-        > Administrateur
-    </label>
+        >
+        <label for="type_user">
+            Utilisateur
+        </label>
+    </p>
 
     <p>
-        ⚠️ <strong>TEST</strong>
-        La création d'un compte administrateur sera supprimée avant la mise en production. 
-        Cette option est actuellement présente uniquement pour tester l'ajout de produits
-        via un compte administrateur.
+        <input
+            type="radio"
+            id="type_admin"
+            name="type_compte"
+            value="admin"
+        >
+        <label for="type_admin">
+            Administrateur
+        </label>
+    </p>
+
+    <p>
+        <strong>ATTENTION</strong>
+        La création d'un compte administrateur sera supprimée avant la mise en production. Cette option est actuellement présente uniquement pour tester l'ajout de produits via un compte administrateur.
     </p>
 
     <button type="submit">

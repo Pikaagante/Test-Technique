@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 
@@ -18,8 +17,6 @@ def liste_produits(request):
     nutriscores = request.GET.getlist("nutriscore")
     labels = request.GET.getlist("label")
     origines = request.GET.getlist("origine")
-
-    facture_id = request.GET.get("modifier_facture")
 
     if recherche:
         produits = produits.filter(
@@ -48,16 +45,8 @@ def liste_produits(request):
                 **{label: True}
             )
 
-    paginator = Paginator(produits, 12)
-    page_number = request.GET.get("page")
-    produits = paginator.get_page(page_number)
-
-    query_params = request.GET.copy()
-    query_params.pop("page", None)
-
     return render(request, "produits/liste.html", {
         "produits": produits,
-        "query_params": query_params.urlencode(),
         "categories": Produit.CATEGORIE_CHOICES,
         "selected_categories": categories,
         "nutriscores": Produit.NUTRISCORE_CHOICES,
@@ -67,9 +56,7 @@ def liste_produits(request):
         "recherche": recherche,
         "prix_min": prix_min,
         "prix_max": prix_max,
-        "facture_id": facture_id,
     })
-
 
 # Ajoute un produit
 def ajouter_produit(request):

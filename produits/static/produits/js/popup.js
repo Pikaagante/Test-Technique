@@ -3,68 +3,143 @@ function ouvrirProduit(id) {
     const produit = produits[id];
 
     let html = `
-        <h2>${produit.nom}</h2>
+        <div class="produit-entete">
+            <div class="produit-image">
+                ${produit.image
+                    ? `<img src="${produit.image}" alt="${produit.nom}">`
+                    : `<div class="sans-image">Aucune image</div>`
+                }
+            </div>
 
-        ${produit.image ? `<img src="${produit.image}" width="250">` : ""}
+            <div class="produit-principal">
+                <span class="produit-categorie">
+                    ${produit.categorie}
+                </span>
 
-        <p> <strong>Catégorie :</strong>${produit.categorie} </p>
+                <h2 class="produit-titre">
+                    ${produit.nom}
+                </h2>
 
-        <p> <strong>Marque :</strong>${produit.marque} </p>
+                <p class="produit-marque">
+                    ${produit.marque || "Marque non renseignée"}
+                </p>
 
-        <p> <strong>Description :</strong> ${produit.description} </p>
+                <div class="produit-prix">
+                    ${produit.prix} €
+                </div>
+            </div>
+        </div>
 
-        <p> <strong>Prix :</strong> ${produit.prix} € </p>
-    `;
+        ${produit.description
+            ? `
+                <div class="produit-description">
+                    <h3>Description</h3>
+                    <p>${produit.description}</p>
+                </div>
+            `
+            : ""
+        }
 
-    if (produit.gramme) {
-        html += `
-            <p> <strong>Poids :</strong> ${produit.gramme} g </p>
+        <div class="produit-details">
+            <div class="detail-groupe">
+                <h3>Informations</h3>
 
-            <p> <strong>Prix au kg :</strong> ${produit.prixkg} €/kg </p>
-        `;
-    }
+                <div class="detail-item">
+                    <span>Catégorie</span>
+                    <strong>${produit.categorie}</strong>
+                </div>
 
-    if (produit.litre) {
-        html += `
-            <p> <strong>Volume :</strong> ${produit.litre} L </p>
+                <div class="detail-item">
+                    <span>Origine</span>
+                    <strong>${produit.origine || "Non renseignée"}</strong>
+                </div>
 
-            <p> <strong>Prix au litre :</strong> ${produit.prixlitre} €/L </p>
-        `;
-    }
+                <div class="detail-item">
+                    <span>Date de péremption</span>
+                    <strong>${produit.date_peremption}</strong>
+                </div>
 
-    html += `
-        <p> <strong>Date de péremption :</strong> ${produit.date_peremption} </p>
+                <div class="detail-item">
+                    <span>Nutri-Score</span>
+                    <strong>${produit.nutriscore || "Non renseigné"}</strong>
+                </div>
+            </div>
 
-        <p> <strong>Origine :</strong> ${produit.origine} </p>
+            <div class="detail-groupe">
+                <h3>Caractéristiques</h3>
 
-        <p> <strong>Nutri-Score :</strong> ${produit.nutriscore} </p>
+                ${produit.gramme
+                    ? `
+                        <div class="detail-item">
+                            <span>Poids</span>
+                            <strong>${produit.gramme} g</strong>
+                        </div>
 
-        <p> <strong>Bio :</strong> ${produit.bio ? "Oui" : "Non"} </p>
+                        <div class="detail-item">
+                            <span>Prix au kg</span>
+                            <strong>${produit.prixkg} €/kg</strong>
+                        </div>
+                    `
+                    : ""
+                }
 
-        <p> <strong>Label Rouge :</strong> ${produit.label_rouge ? "Oui" : "Non"} </p>
+                ${produit.litre
+                    ? `
+                        <div class="detail-item">
+                            <span>Volume</span>
+                            <strong>${produit.litre} L</strong>
+                        </div>
 
-        <p> <strong>AOP :</strong> ${produit.aop ? "Oui" : "Non"} </p>
+                        <div class="detail-item">
+                            <span>Prix au litre</span>
+                            <strong>${produit.prixlitre} €/L</strong>
+                        </div>
+                    `
+                    : ""
+                }
 
-        <p> <strong>IGP :</strong> ${produit.igp ? "Oui" : "Non"} </p>
+                <div class="detail-labels">
+                    ${produit.bio ? '<span>Bio</span>' : ""}
+                    ${produit.label_rouge ? '<span>Label Rouge</span>' : ""}
+                    ${produit.aop ? '<span>AOP</span>' : ""}
+                    ${produit.igp ? '<span>IGP</span>' : ""}
+                </div>
+            </div>
+        </div>
 
-        <button onclick="ajouterAuPanier(event, ${id})">
-            Ajouter
-        </button>
+        <div class="produit-actions">
+            <button
+                type="button"
+                class="btn-ajouter"
+                onclick="ajouterAuPanier(event, ${id})"
+            >
+                Ajouter au panier
+            </button>
     `;
 
     if (estAdmin) {
         html += `
-            <div class="actions-produit">
-                <button onclick="modifierProduit(${id})">
-                    Modifier
-                </button>
+            <button
+                type="button"
+                class="btn-modifier"
+                onclick="modifierProduit(${id})"
+            >
+                Modifier
+            </button>
 
-                <button onclick="supprimerProduit(${id})">
-                    Supprimer
-                </button>
-            </div>
+            <button
+                type="button"
+                class="btn-supprimer"
+                onclick="supprimerProduit(${id})"
+            >
+                Supprimer
+            </button>
         `;
     }
+
+    html += `
+        </div>
+    `;
 
     document.getElementById("popup-infos").innerHTML = html;
     document.getElementById("popup").style.display = "flex";
@@ -75,12 +150,6 @@ function ouvrirProduit(id) {
 function fermerPopup() {
     document.getElementById("popup").style.display = "none";
 }
-
-document.getElementById("popup").addEventListener("click", function(event) {
-    if (event.target === this) {
-        fermerPopup();
-    }
-});
 
 
 // Gestion du produit
@@ -102,9 +171,11 @@ function supprimerProduit(id) {
         });
 }
 
+
 function modifierProduit(id) {
     window.location.href = `/produits/${id}/modifier/`;
 }
+
 
 // Utilitaire
 function getCookie(name) {
@@ -113,10 +184,18 @@ function getCookie(name) {
     for (const cookie of cookies) {
         const [key, value] = cookie.trim().split("=");
 
-        if (key === name) {
+        if (key === "csrftoken") {
             return decodeURIComponent(value);
         }
     }
 
     return null;
 }
+
+
+// Fermeture en cliquant sur l'arrière-plan
+document.getElementById("popup").addEventListener("click", function(event) {
+    if (event.target === this) {
+        fermerPopup();
+    }
+});

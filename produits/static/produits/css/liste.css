@@ -1,124 +1,583 @@
-/* Structure */
+/* VARIABLES*/
+:root {
+    --primary-blue: #0066cc;
+    --primary-dark-blue: #004b96;
+    --primary-light-blue: #e6f0ff;
+    --secondary-blue: #003d7a;
+    --accent-red: #cc0000;
+    --text-dark: #1a1a1a;
+    --text-light: #666666;
+    --border-light: #e0e0e0;
+    --background-light: #f8f9fa;
+    --white: #ffffff;
+}
 
+/* STRUCTURE*/
 .conteneur {
     display: flex;
     gap: 30px;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 20px 40px;
     align-items: flex-start;
 }
 
-
-/* Filtres */
-
+/* FILTRES*/
 .filtres {
-    width: 220px;
+    width: 240px;
     flex-shrink: 0;
-    border: 1px solid #ddd;
+    background-color: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
     padding: 20px;
     box-sizing: border-box;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .filtres h2 {
+    font-size: 18px;
+    color: var(--primary-dark-blue);
     margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--primary-light-blue);
+    font-weight: 600;
 }
 
 .filtres h3 {
-    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filtres hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-light);
+    margin: 18px 0;
 }
 
 .filtres label {
-    display: block;
-    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: color 0.3s ease;
+}
+
+.filtres label:hover {
+    color: var(--primary-blue);
+}
+
+.filtres input[type="checkbox"],
+.filtres input[type="radio"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-blue);
 }
 
 .filtres input[type="text"],
 .filtres input[type="number"] {
     width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 10px;
     box-sizing: border-box;
-    padding: 8px;
-    margin-bottom: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+.filtres input[type="text"]:focus,
+.filtres input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px var(--primary-light-blue);
+}
 
-/* Produits */
+.filtres button {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
 
+.filtres button:hover {
+    background-color: var(--primary-dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+/* PRODUITS*/
 .produits {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 250px);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
 }
 
 .produit {
-    width: 250px;
-    padding: 15px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
+    background-color: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    overflow: hidden;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .produit:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 102, 204, 0.15);
+    border-color: var(--primary-light-blue);
 }
 
 .produit img {
-    width: 200px;
+    width: 100%;
     height: 200px;
     object-fit: contain;
+    padding: 15px;
+    background-color: var(--background-light);
 }
 
+.produit p:first-of-type {
+    display: none;
+}
 
-/* Popup produit */
+.produit h2 {
+    font-size: 15px;
+    color: var(--text-dark);
+    margin: 12px 15px 8px;
+    line-height: 1.4;
+    flex-grow: 1;
+    font-weight: 600;
+}
 
+.produit p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin: 6px 15px;
+    line-height: 1.3;
+}
+
+.produit p strong {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.produit button {
+    margin: 12px 15px 15px;
+    padding: 11px 16px;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.produit button:hover {
+    background-color: var(--primary-dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.produit button:active {
+    transform: translateY(0);
+}
+
+/* POPUP PRODUIT*/
 .popup {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup.visible {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .popup-contenu {
     position: relative;
-    width: 500px;
-    max-height: 80%;
-    padding: 30px;
+    width: 750px;
+    max-width: 90%;
+    max-height: 85vh;
     overflow-y: auto;
-    background: white;
+    padding: 35px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
 }
 
-.popup-contenu img {
-    max-width: 250px;
-    max-height: 250px;
-    object-fit: contain;
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .fermer {
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 20px;
-    font-size: 30px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    color: var(--text-light);
     cursor: pointer;
+    padding: 0;
+    transition: color 0.3s ease;
 }
 
+.fermer:hover {
+    color: var(--accent-red);
+}
 
-/* Pagination */
+/*  EN-TÊTE PRODUIT */
+.produit-entete {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 35px;
+    align-items: center;
+    margin-bottom: 25px;
+}
 
+.produit-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 280px;
+    background-color: var(--background-light);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.produit-image img {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    object-fit: contain;
+}
+
+.sans-image {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.produit-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.produit-categorie {
+    width: fit-content;
+    padding: 5px 10px;
+    background-color: var(--primary-light-blue);
+    color: var(--primary-blue);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.produit-titre {
+    font-size: 25px;
+    line-height: 1.3;
+    color: var(--text-dark);
+    margin: 5px 0 0;
+}
+
+.produit-marque {
+    color: var(--text-light);
+    font-size: 14px;
+    margin: 0;
+}
+
+.produit-prix {
+    margin-top: 15px;
+    color: var(--primary-blue);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* DESCRIPTION*/
+.produit-description {
+    padding: 18px;
+    margin-bottom: 25px;
+    background-color: var(--background-light);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+}
+
+.produit-description h3 {
+    margin: 0 0 8px;
+    color: var(--primary-dark-blue);
+    font-size: 14px;
+}
+
+.produit-description p {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* DÉTAILS*/
+.produit-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.detail-groupe {
+    padding: 18px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background-color: var(--white);
+}
+
+.detail-groupe h3 {
+    margin: 0 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-light-blue);
+    color: var(--primary-dark-blue);
+    font-size: 14px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+}
+
+.detail-item:last-of-type {
+    border-bottom: none;
+}
+
+.detail-item span {
+    color: var(--text-light);
+}
+
+.detail-item strong {
+    color: var(--text-dark);
+    text-align: right;
+    font-weight: 600;
+}
+
+.detail-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.detail-labels span {
+    padding: 5px 8px;
+    background-color: var(--primary-light-blue);
+    color: var(--primary-blue);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ACTIONS*/
+.produit-actions {
+    display: flex;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border-light);
+}
+
+.produit-actions button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-ajouter {
+    border: none;
+    background-color: var(--primary-blue);
+    color: var(--white);
+}
+
+.btn-ajouter:hover {
+    background-color: var(--primary-dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.btn-modifier {
+    border: 1px solid var(--border-light);
+    background-color: var(--background-light);
+    color: var(--text-dark);
+}
+
+.btn-modifier:hover {
+    background-color: var(--border-light);
+    transform: translateY(-2px);
+}
+
+.btn-supprimer {
+    border: 1px solid #feb2b2;
+    background-color: #ffebee;
+    color: var(--accent-red);
+}
+
+.btn-supprimer:hover {
+    background-color: #ffcdd2;
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE*/
+@media (max-width: 768px) {
+    .popup-contenu {
+        width: 95%;
+        padding: 25px 20px;
+    }
+
+    .produit-entete {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .produit-image {
+        height: 220px;
+    }
+
+    .produit-details {
+        grid-template-columns: 1fr;
+    }
+
+    .produit-actions {
+        flex-direction: column;
+    }
+
+    .produit-actions button {
+        width: 100%;
+    }
+}
+
+/* PAGINATION*/
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 12px;
+    margin: 40px 0;
+    padding: 20px;
+    flex-wrap: wrap;
 }
 
-.pagination a {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    text-decoration: none;
-}
-
+.pagination a,
 .pagination span {
-    font-weight: bold;
+    padding: 10px 14px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: var(--white);
+    color: var(--primary-blue);
+}
+
+.pagination a:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.page-actuelle {
+    background-color: var(--primary-blue) !important;
+    color: var(--white) !important;
+    border-color: var(--primary-blue) !important;
+    font-weight: 600;
+}
+
+/* RESPONSIVE*/
+@media (max-width: 1024px) {
+    .conteneur {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .filtres {
+        width: 100%;
+        position: static;
+    }
+
+    .produits {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (min-width: 1600px) {
+    .conteneur {
+        max-width: 1800px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .produits {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .produit img {
+        height: 200px;
+    }
 }

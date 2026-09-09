@@ -32,4 +32,5 @@ class ProduitForm(forms.ModelForm):
             "date_peremption": forms.DateInput(
                 attrs={"type": "date"}
             ),
+            "image": forms.FileInput(),
         }

@@ -57,6 +57,7 @@ function afficherResultats(produits) {
             <p>Aucun produit trouvé.</p>
         `;
 
+        afficherPage();
         return;
     }
 
@@ -68,13 +69,17 @@ function afficherResultats(produits) {
                 class="produit"
                 onclick="ouvrirProduit(${produit.id})"
             >
-                ${produit.image ? `<img src="${produit.image}" alt="${produit.nom}">` : `<p>Aucune image</p>`}
+                ${
+                    produit.image
+                        ? `<img src="${produit.image}" alt="${produit.nom}">`
+                        : `<p>Aucune image</p>`
+                }
 
                 <h2>${produit.nom}</h2>
 
-                <p> Marque : ${produit.marque} </p>
+                <p>Marque : ${produit.marque}</p>
 
-                <p> Prix : ${produit.prix} € </p>
+                <p>Prix : ${produit.prix} €</p>
 
                 <button onclick="ajouterAuPanier(event, ${produit.id})">
                     Ajouter
@@ -84,4 +89,7 @@ function afficherResultats(produits) {
     });
 
     conteneur.innerHTML = html;
+
+    pageActuelle = 1;
+    afficherPage();
 }

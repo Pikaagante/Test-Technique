@@ -2,7 +2,7 @@
 <nav class="menu">
     <div class="menu-gauche">
         <a href="{% url 'liste_produits' %}" class="logo">
-            🛒 MonShop
+            MonShop
         </a>
 
         <a href="{% url 'liste_produits' %}">
@@ -11,13 +11,13 @@
 
         {% if user.is_authenticated %}
             <a href="{% url 'liste_factures' %}">
-                🧾 Factures
+                Factures
             </a>
         {% endif %}
 
         <div class="panier">
             <button class="panier-bouton" onclick="ouvrirPanier()">
-                🛍️
+                Panier
                 <span id="nombre-produits">0</span>
             </button>
         </div>
@@ -33,7 +33,7 @@
         {% if user.is_authenticated %}
             <div class="profil">
                 <button class="profil-bouton">
-                    👤 {{ user.username }} ▼
+                    {{ user.username }} ▼
                 </button>
 
                 <div class="profil-menu">
@@ -60,8 +60,7 @@
     </div>
 </nav>
 
-
-<!-- Factures -->
+<!-- Panier -->
 <div id="popup-panier" class="popup-panier">
     <div class="popup-panier-contenu">
         <button
@@ -101,7 +100,6 @@
         </button>
     </div>
 </div>
-
 
 <!-- Notification -->
 <div id="notification" class="notification"></div>

@@ -7,47 +7,50 @@
 
 <div class="factures-page">
 
-    <h1>Mes factures</h1>
+    <h1>
+        {% if user.is_staff %}
+        Factures de tous les clients
+        {% else %}
+        Mes factures
+        {% endif %}
+    </h1>
 
     <div class="factures">
 
         {% for facture in factures %}
 
-            <div
-                class="carte-facture"
-                onclick="ouvrirFacture({{ facture.id }})"
-            >
+        <div class="carte-facture" onclick="ouvrirFacture({{ facture.id }})">
 
-                <h2>
-                    Commande du {{ facture.date|date:"d/m/Y" }}
-                </h2>
+            <h2>
+                Commande du {{ facture.date|date:"d/m/Y" }}
+            </h2>
 
-                {% if user.is_staff %}
+            {% if user.is_staff %}
 
-                    <p>
-                        Client :
-                        {{ facture.utilisateur }}
-                    </p>
+            <p>
+                Client :
+                {{ facture.utilisateur }}
+            </p>
 
-                {% endif %}
+            {% endif %}
 
-                <p>
-                    Produits :
-                    {{ facture.nombre_produits }}
-                </p>
+            <p>
+                Produits :
+                {{ facture.nombre_produits }}
+            </p>
 
-                <strong>
-                    Total :
-                    {{ facture.total }} €
-                </strong>
+            <strong>
+                Total :
+                {{ facture.total }} €
+            </strong>
 
-            </div>
+        </div>
 
         {% empty %}
 
-            <p>
-                Vous n'avez encore aucune facture.
-            </p>
+        <p>
+            Vous n'avez encore aucune facture.
+        </p>
 
         {% endfor %}
 
@@ -56,45 +59,45 @@
 
     {% if factures.paginator.num_pages > 1 %}
 
-        <div class="pagination">
+    <div class="pagination">
 
-            {% if factures.has_previous %}
+        {% if factures.has_previous %}
 
-                <a href="?page={{ factures.previous_page_number }}">
-                    ← Précédente
-                </a>
+        <a href="?page={{ factures.previous_page_number }}">
+            ← Précédente
+        </a>
 
-            {% endif %}
-
-
-            {% for numero in factures.paginator.page_range %}
-
-                {% if numero == factures.number %}
-
-                    <span class="page-actuelle">
-                        {{ numero }}
-                    </span>
-
-                {% else %}
-
-                    <a href="?page={{ numero }}">
-                        {{ numero }}
-                    </a>
-
-                {% endif %}
-
-            {% endfor %}
+        {% endif %}
 
 
-            {% if factures.has_next %}
+        {% for numero in factures.paginator.page_range %}
 
-                <a href="?page={{ factures.next_page_number }}">
-                    Suivante →
-                </a>
+        {% if numero == factures.number %}
 
-            {% endif %}
+        <span class="page-actuelle">
+            {{ numero }}
+        </span>
 
-        </div>
+        {% else %}
+
+        <a href="?page={{ numero }}">
+            {{ numero }}
+        </a>
+
+        {% endif %}
+
+        {% endfor %}
+
+
+        {% if factures.has_next %}
+
+        <a href="?page={{ factures.next_page_number }}">
+            Suivante →
+        </a>
+
+        {% endif %}
+
+    </div>
 
     {% endif %}
 
@@ -105,10 +108,7 @@
 
     <div class="popup-facture-contenu">
 
-        <button
-            class="fermer-facture"
-            onclick="fermerFacture()"
-        >
+        <button class="fermer-facture" onclick="fermerFacture()">
             &times;
         </button>
 
