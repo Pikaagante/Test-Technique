@@ -10,9 +10,6 @@ __pycache__/
 # Django
 *.log
 
-# Fichiers média générés
-Ex2/media/
-
 # Fichiers IDE
 .vscode/
 .idea/
