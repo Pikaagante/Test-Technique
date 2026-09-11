@@ -63,7 +63,7 @@ function afficherPanier(data) {
     if (titre) {
         titre.textContent = modification
             ? "Modifier la commande"
-            : "Votre panier";
+            : "Votre facture";
     }
 
     if (boutonConfirmation) {
